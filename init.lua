@@ -371,55 +371,36 @@ captcha.register_captcha("text", {
 		]]..input.image):format(minetest.colorize(input.style.color or "white", "Enter the following:"))
 	end,
 	get = function(name, style)
-		-- Randomize distortions
-		local function effect(image)
-			local effects = {
-				function()
-					return "[colorize:#"..string.format("%02x%02x%02x",math.random(0,255),math.random(0,255),math.random(0,255))..":"..math.random(10,100)
-				end,
-				function()
-					return "[brighten"
-				end,
-				function()
-					local channels = ""
-					local valid = {"r","g","b","a"}
-					local ct = math.random(1,3)
-					for i = 1, ct do
-					channels = channels..valid[math.random(1,3)]
-					end
-					return "[invert:"..channels
-				end,
-			}
-			local count = math.random(0,3)
-			if count == 0 then
-				return image
-			end
-			for i = 1, 3 - count do
-				effects[math.random(1,#effects)] = nil
-			end
-			for _, effect in pairs(effects) do
-				image = image.."^"..effect()
-			end
+		-- Distortions
+        local effects = {
+            function()
+                return ("^[colorize\\:#%06X\\:%s"):format(math.random() * 0xFFFFFF, math.random(10, 100))
+            end,
+            function()
+                return "^[brighten"
+            end,
+            function()
+                return "^[invert\\:" .. ({"r", "g", "b", "rg", "rb", "bg", "rgb"})[math.random(1, 7)]
+            end,
+        }
 
-			return image
-		end
+        local CHAR_W = 7
+        local len = math.random(4, 6)
+        local str = ""
+        local img = "[combine:" .. len * CHAR_W .. "x8"
 
-		math.randomseed(os.time())
+        for i = 0, len - 1 do
+            local idx = math.random(1, 36)
+            local char = ("0123456789abcdefghijklmnopqrstuvwxyz"):sub(idx, idx)
+            local fx = ({"", effects[1]()})[math.random(1, 2)] .. ({"", effects[2]()})[math.random(1, 2)] .. ({"", effects[3]()})[math.random(1, 2)]
 
-		local len = math.random(5, 8)
-		local phrase = string.random(len)
-		local image = ""
-		local ct = 0
+            str = str .. char
+            img = img .. (":%s,0=([combine\\:8x8\\:%s,0=captcha_alphabet.png%s)"):format(i * CHAR_W, (idx - 1) * -CHAR_W, fx)
+        end
 
-		-- Create string
-		for char in phrase:gmatch(".") do
-			image = image .. "([combine:".. 8 * len .."x8:".. 8 * ct ..",0="..effect("captcha_char_"..char..".png")..")^"
-			ct = ct + 1
-		end
+        local element = ("image[%s,1.8;%s,0.7;%s]"):format((0.2 * (8 - len)) * 2, len * 0.7, F(img))
 
-		image = "image[".. (0.2*(8-len))*2 ..",1.8;".. len * 0.7 ..",0.7;" .. F(image:sub(1,-2)):gsub("\\,", ",") .. "]"
-
-		return {style = style, image = image, phrase = phrase}
+		return {style = style, image = element, phrase = str}
 	end,
 	on_receive_fields = function(player, formname, fields)
 		if formname:match("^captcha:text") then
@@ -479,4 +460,4 @@ captcha.register_on_fail(function(name, type)
 	end
 end)
 
-dofile(PATH .. "/test.lua")
+-- dofile(PATH .. "/test.lua")
