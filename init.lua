@@ -10,7 +10,7 @@ mcaptcha.registered_handlers = {
 
 mcaptcha.states = {}
 
-local DEVELOPMENT = true
+local DEVELOPMENT = false
 
 -- Handlers
 function mcaptcha.register_on_pass(func)
