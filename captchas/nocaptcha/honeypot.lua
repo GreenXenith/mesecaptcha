@@ -1,6 +1,6 @@
 -- No human should be able to press these (easily)
 
-mcaptcha.register_nocaptcha("minecaptcha:honeypot", function(_, state)
+mcaptcha.register_nocaptcha("mesecaptcha:honeypot", function(_, state)
     state.base.form = state.base.form .. [[
         button[-1000,-1000;0,0;honeypot;Ban me]
         button[-1000,0;0,0;honeypot;Ban me]

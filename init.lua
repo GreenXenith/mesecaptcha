@@ -10,7 +10,7 @@ mcaptcha.registered_handlers = {
 
 mcaptcha.states = {}
 
-local DEVELOPMENT = false
+local DEVELOPMENT = true
 
 -- Handlers
 function mcaptcha.register_on_pass(func)
@@ -73,8 +73,8 @@ local container_template =
         "%s" ..
         "container_end[]" ..
 
-        "label[1,8.5;TEXTCOLOR(Powered by mineCaptcha)]" ..
-        "image[0.1,8.1;0.8,0.8;captcha_icon.png]" ..
+        "label[1,8.5;TEXTCOLOR(Powered by meseCaptcha)]" ..
+        "image[0.1,8.1;0.8,0.8;mesecaptcha_icon.png]" ..
         "field[1000,1000;0,0;captcha;;]" .. -- Hidden field
     "container_end[]"
 
@@ -181,7 +181,7 @@ if DEVELOPMENT then
                 size[10,10]
                 real_coordinates[true]
                 style[captcha;textcolor=#abcdef]
-                captcha[1,0.5;minecaptcha:%s]
+                captcha[1,0.5;mesecaptcha:%s]
             ]]):format(param ~= "" and param or "notrobot"))
         end,
     })

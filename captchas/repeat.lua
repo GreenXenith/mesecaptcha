@@ -21,7 +21,7 @@ local base_form = [[
     field[2,4.5;4,0.5;input;;]
     button[2,5;3,1;submit;Submit]
     field_close_on_enter[input;false]
-    image_button[5,5;1,1;captcha_refresh.png;refresh;]
+    image_button[5,5;1,1;mesecaptcha_refresh.png;refresh;]
     tooltip[refresh;Refresh Captcha]
 ]]
 
@@ -38,14 +38,14 @@ local function generate_text()
         for j = 1, #effects do if math.random() > 0.5 then fx = fx .. effects[j]() end end -- Randomized effects
 
         str = str .. char
-        img = img .. (":%s,0=([combine\\:8x8\\:%s,0=captcha_alphabet.png%s)"):format(i * CHAR_W, (idx - 1) * -CHAR_W, fx)
+        img = img .. (":%s,0=([combine\\:8x8\\:%s,0=mesecaptcha_alphabet.png%s)"):format(i * CHAR_W, (idx - 1) * -CHAR_W, fx)
     end
 
     return str, ("image[%s,3;%s,1;%s]"):format(4 - len / 2, len, minetest.formspec_escape(img))
 end
 
 -- Type shown text
-mcaptcha.register_captcha("minecaptcha:repeat", function(_, data)
+mcaptcha.register_captcha("mesecaptcha:repeat", function(_, data)
     if not data.phrase then
         data.phrase, data.element = generate_text()
     end

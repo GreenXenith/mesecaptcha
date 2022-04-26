@@ -54,7 +54,7 @@ local function generate_grid_all()
 end
 
 -- "Select all images containing [...]"
-mcaptcha.register_captcha("minecaptcha:identify_all", function(_, data)
+mcaptcha.register_captcha("mesecaptcha:identify_all", function(_, data)
     if not data.grid then
         data.grid, data.choice = generate_grid_all()
     end
@@ -62,7 +62,7 @@ mcaptcha.register_captcha("minecaptcha:identify_all", function(_, data)
     local form = ([[
         label[2,1;TEXTCOLOR(Select all images containing %s.)]
         button[1.5,6.5;4,1;submit;Submit]
-        image_button[5.5,6.5;1,1;captcha_refresh.png;refresh;]
+        image_button[5.5,6.5;1,1;mesecaptcha_refresh.png;refresh;]
         tooltip[refresh;Refresh Captcha]
     ]]):format(data.choice)
 
@@ -121,14 +121,14 @@ local function generate_grid_one()
 end
 
 -- "Select the [...]"
-mcaptcha.register_captcha("minecaptcha:identify_one", function(_, data)
+mcaptcha.register_captcha("mesecaptcha:identify_one", function(_, data)
     if not data.grid then
         data.grid, data.choice = generate_grid_one()
     end
 
     local form = ([[
         label[3,1;TEXTCOLOR(Select the %s.)]
-        image_button[5.5,6.5;1,1;captcha_refresh.png;refresh;]
+        image_button[5.5,6.5;1,1;mesecaptcha_refresh.png;refresh;]
     ]]):format(data.choice)
 
     for i = 0, #data.grid - 1 do
